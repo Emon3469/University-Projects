@@ -1,0 +1,23 @@
+# Temporary lock files
+/tmp/os_sim_*
+
+# Bash history
+.bash_history
+
+# Editor backups
+*~
+*.swp
+*.swo
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+temp/
