@@ -2,14 +2,8 @@
 file=${1:-"$(dirname "$0")/../data/reference.txt"}
 ref=($(tr -s ' \n' ' ' < "$file"))
 frames=${2:-3}
-fifo(){
-  #!/usr/bin/env bash
 
-  file=${1:-"$(dirname "$0")/../data/reference.txt"}
-  ref=( $(tr -s ' \n' ' ' < "$file") )
-  frames=${2:-3}
-
-  fifo() {
+fifo() {
     declare -a F
     misses=0
     head=0
@@ -37,7 +31,9 @@ fifo(){
     if [ $misses -gt $((total * 70 / 100)) ]; then
         echo "WARNING: Thrashing detected! Page fault rate is ${misses}/${total} (>70%)"
     fi
-}  lru() {
+}
+
+lru() {
     declare -A last
     declare -a F
     misses=0
@@ -83,7 +79,9 @@ fifo(){
     if [ $misses -gt $((total * 70 / 100)) ]; then
         echo "WARNING: Thrashing detected! Page fault rate is ${misses}/${total} (>70%)"
     fi
-}  lfu() {
+}
+
+lfu() {
     declare -A cnt
     declare -a F
     misses=0
@@ -126,21 +124,23 @@ fifo(){
     if [ $misses -gt $((total * 70 / 100)) ]; then
         echo "WARNING: Thrashing detected! Page fault rate is ${misses}/${total} (>70%)"
     fi
-}  echo "Frames default=$frames"
-  echo "1) FIFO 2) LRU 3) LFU"
-  read -p "choice: " ch
+}
 
-  case $ch in
-    1)
-      fifo
-      ;;
-    2)
-      lru
-      ;;
-    3)
-      lfu
-      ;;
-    *)
-      echo "bad"
-      ;;
-  esac
+echo "Frames default=$frames"
+echo "1) FIFO 2) LRU 3) LFU"
+read -p "choice: " ch
+
+case $ch in
+  1)
+    fifo
+    ;;
+  2)
+    lru
+    ;;
+  3)
+    lfu
+    ;;
+  *)
+    echo "bad"
+    ;;
+esac

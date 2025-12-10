@@ -50,7 +50,9 @@ first_fit() {
         ext_frag=$((ext_frag + len))
     done
     echo "External Fragmentation: ${ext_frag} units"
-}best_fit() {
+}
+
+best_fit() {
   holes=("0:${memsize}")
   alloc=()
 

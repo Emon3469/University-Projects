@@ -20,7 +20,7 @@ fcfs() {
     a=$(echo "$ln" | cut -d',' -f2)
     b=$(echo "$ln" | cut -d',' -f3)
 
-    if [ $t -lt $a ]; then
+    if [ "$t" -lt "$a" ]; then
       t=$a
     fi
 
