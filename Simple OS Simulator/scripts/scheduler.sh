@@ -4,7 +4,7 @@
 file=${1:-"$(dirname "$0")/../data/processes.csv"}
 
 IFS=$'\n'
-mapfile -t LINES < <(tail -n +1 "$file" | sed '/^$/d')
+mapfile -t LINES < <(tail -n +2 "$file" | sed '/^$/d')
 
 fcfs() {
   mapfile -t S < <(printf "%s\n" "${LINES[@]}" | sort -t, -k2n)
@@ -126,7 +126,7 @@ rr() {
       pid=$(echo "$ln" | cut -d',' -f1)
       a=$(echo "$ln" | cut -d',' -f2)
 
-      if [ $a -le $t ]; then
+      if [ $a -le $t ] && [ -n "${rem[$pid]+x}" ]; then
         if [[ ! " ${queue[*]} " =~ " $pid " ]]; then
           queue+=("$pid")
         fi
@@ -134,13 +134,7 @@ rr() {
     done
 
     if [ ${#queue[@]} -eq 0 ]; then
-      anyleft=0
-      for v in "${!rem[@]}"; do
-        anyleft=1
-        break
-      done
-
-      if [ $anyleft -eq 0 ]; then
+      if [ ${#rem[@]} -eq 0 ]; then
         break
       fi
 
@@ -149,6 +143,12 @@ rr() {
     fi
 
     cur=${queue[0]}
+    queue=("${queue[@]:1}")
+    
+    if [ -z "${rem[$cur]+x}" ]; then
+      continue
+    fi
+
     burst=${rem[$cur]}
     use=$(( burst < q ? burst : q ))
     burst=$((burst - use))
@@ -157,10 +157,9 @@ rr() {
 
     if [ ${rem[$cur]} -le 0 ]; then
       unset rem[$cur]
-      queue=("${queue[@]:1}")
       echo "$cur finished at $t"
     else
-      queue=("${queue[@]:1}" "$cur")
+      queue+=("$cur")
     fi
   done
 }

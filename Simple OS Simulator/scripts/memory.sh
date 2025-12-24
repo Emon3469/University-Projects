@@ -101,7 +101,9 @@ best_fit() {
         ext_frag=$((ext_frag + len))
     done
     echo "External Fragmentation: ${ext_frag} units"
-}worst_fit() {
+}
+
+worst_fit() {
   holes=("0:${memsize}")
   alloc=()
 
@@ -150,7 +152,9 @@ best_fit() {
         ext_frag=$((ext_frag + len))
     done
     echo "External Fragmentation: ${ext_frag} units"
-}echo "1) First-fit 2) Best-fit 3) Worst-fit"
+}
+
+echo "1) First-fit 2) Best-fit 3) Worst-fit"
 read -p "choice: " c
 
 case $c in
